@@ -1,0 +1,33 @@
+<%- include("partials/header.ejs") %>
+<body>
+  <header>
+    <div class="header-container">
+      <a href="/">Today</a> <a href="/work">Work</a>
+    </div>
+  </header>
+  <hr />
+  <h1>Work ToDo List</h1>
+
+  <div class="app-container">
+    <form action="/work" id="form" class="form" method="post">
+      <textarea
+        name="newWorkTodo"
+        id="add-text-area"
+        cols="20"
+        rows="1"
+        placeholder="What do you need to do?"
+      ></textarea>
+      <button type="submit" id="add-todo-button">Add</button>
+    </form>
+
+    <div class="list-container">
+      <% if (workTodos.length > 0) { %> <% workTodos.forEach((todo) => { %> <%-
+      include("partials/listElement.ejs", { toDo: todo }) %> <% }); %> <% } else
+      { %>
+      <p>No todos yet.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <%- include("partials/footer.ejs") %>
+</body>

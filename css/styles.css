@@ -1,0 +1,157 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: "DM Sans", sans-serif;
+  background-color: #222;
+  color: #fff;
+  height: 100%;
+  text-align: center;
+}
+
+header {
+  background-color: #111;
+  text-align: left;
+  padding: 10px;
+}
+
+.header-container {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.header-container a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 20px;
+  font-size: 20px;
+}
+
+.app-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+h1 {
+  font-family: "Inclusive Sans", sans-serif;
+  font-size: 36px;
+  color: #fff;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  text-align: left;
+  gap: 20px;
+}
+
+.form-check-label {
+  display: flex;
+  align-items: center;
+}
+
+#add-text-area {
+  width: 70%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+}
+
+#add-todo-button {
+  background-color: #2ae43a;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#add-todo-button:hover {
+  background-color: #1d6d1d;
+}
+
+.list-container {
+  margin-top: 20px;
+  text-align: left;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.checkbox {
+  margin-right: 10px;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fdfdfd;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+}
+
+.checkbox:checked {
+  background-color: #19cc19;
+  border: 2px solid #fdfdfd;
+}
+
+.checkbox:after {
+  content: "\2713";
+  font-size: 16px;
+  color: #fff;
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  display: none;
+}
+
+.checkbox:checked + label {
+  text-decoration: line-through;
+  text-decoration-color: #554d4d;
+  text-decoration-thickness: 0.3rem;
+}
+
+.checkbox:checked + label::after {
+  content: 'X';
+  /* position: relative; */
+  /* top: 0; */
+  /* right: -20px; */
+  font-size: 20px;
+  color: #FF0000;
+  cursor: pointer;
+}
+
+
+footer {
+  background-color: #111;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: #fff;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  #add-text-area {
+    width: 100%;
+  }
+}
