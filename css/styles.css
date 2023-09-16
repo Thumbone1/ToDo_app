@@ -66,6 +66,7 @@ h1 {
   font-size: 16px;
   border: none;
   border-radius: 5px;
+  resize: none;
 }
 
 #add-todo-button {
@@ -124,15 +125,14 @@ ul {
 }
 
 .checkbox:checked + label::after {
-  content: 'X';
+  content: "X";
   /* position: relative; */
   /* top: 0; */
   /* right: -20px; */
   font-size: 20px;
-  color: #FF0000;
+  color: #ff0000;
   cursor: pointer;
 }
-
 
 footer {
   background-color: #111;

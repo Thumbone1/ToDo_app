@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("index.ejs", { dailyTodos }); 
+  res.render("index.ejs", { dailyTodos });
 });
 
 app.get("/work", (req, res) => {
@@ -20,19 +20,29 @@ app.get("/work", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  const newTodo = req.body.newTodo;
-  if (newTodo) {
-    dailyTodos.push(newTodo);
+  try {
+    const newTodo = req.body.newTodo;
+    if (newTodo) {
+      dailyTodos.push(newTodo);
+    }
+    res.redirect("/");
+  } catch (err) {
+    console.log(err);
+    res.render("error.ejs");
   }
-  res.redirect("/");
 });
 
 app.post("/work", (req, res) => {
-  const newWorkTodo = req.body.newWorkTodo;
-  if (newWorkTodo) {
-    workTodos.push(newWorkTodo);
+  try {
+    const newWorkTodo = req.body.newWorkTodo;
+    if (newWorkTodo) {
+      workTodos.push(newWorkTodo);
+    }
+    res.redirect("/work");
+  } catch (err) {
+    console.log(err);
+    res.redirect("error.ejs");
   }
-  res.redirect("/work");
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
