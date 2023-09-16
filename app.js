@@ -7,7 +7,6 @@ let dailyTodos = [];
 let workTodos = [];
 
 app.use(express.static("public"));
-app.use(express.static("css"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 

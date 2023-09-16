@@ -124,11 +124,11 @@ ul {
   text-decoration-thickness: 0.3rem;
 }
 
-.checkbox:checked + label::after {
+.checkbox:checked + .input-helper {
   content: "X";
-  /* position: relative; */
-  /* top: 0; */
-  /* right: -20px; */
+  position: relative; 
+  top: 0; 
+  right: -20px;
   font-size: 20px;
   color: #ff0000;
   cursor: pointer;
