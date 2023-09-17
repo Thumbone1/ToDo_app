@@ -7,37 +7,56 @@ mongoose.set("strictQuery", false);
 // Define the database URL to connect to:
 const todolistDB = "mongodb://127.0.0.1/todolistDB";
 
-// create new Schema for todo list
+// create new Schema for main list
 const TodoSchema = new Schema({
   name: String,
 });
 
+// create a general schema for custom list names
+const ListSchema = new Schema({
+  name: String,
+  item: [TodoSchema],
+});
+
 // create new model
 const Todo = model("Todo", TodoSchema);
+export const List = model("List", ListSchema);
 
-export async function getTodos() {
+/**
+ * connects to db.
+ * throws error if failure to connect
+ */
+export async function connectToDatabase() {
   try {
     await mongoose.connect(todolistDB);
-    console.log("Connection to DB established.");
-
-    console.log("getting items from the DB");
-    const items = [];
-    const todosFromDB = await Todo.find({});
-    todosFromDB.forEach((item) => items.push(item.name));
-    return items;
+    console.log("Successfully connected to database");
   } catch (error) {
-    console.error("The app encountered an error:", error);
-  } finally {
-    await mongoose.connection.close();
-    console.log("Connection to DB closed.");
+    console.error("An error occured while connecting to DB:", error);
   }
 }
 
+/**
+ *
+ * @returns Promise to return array of names from Todos collection
+ */
+export async function getTodos() {
+  try {
+    console.log("getting items from the DB");
+    const items = [];
+    const todosFromDB = await Todo.find({});
+    todosFromDB.forEach((item) => items.push(item));
+    return items;
+  } catch (error) {
+    console.error("The app encountered an error:", error);
+  }
+}
+
+/**
+ * @param {newTodo} todoString
+ * Should save todo items to the Todos collection
+ */
 export async function addTodo(todoString) {
   try {
-    await mongoose.connect(todolistDB);
-    console.log("Connection to DB established.");
-
     const newDBItem = new Todo({
       name: todoString,
     });
@@ -50,12 +69,14 @@ export async function addTodo(todoString) {
     console.log(`Added ${todoString} to database`);
   } catch (error) {
     console.error("The app encountered a DB error:", error);
-  } finally {
-    await mongoose.connection.close();
-    console.log("Connection to DB closed.");
   }
 }
 
-export async function deleteTodo(todoString) {
-  return;
+export async function deleteTodo(todoId) {
+  try {
+    await Todo.deleteOne({ _id: todoId });
+    console.log("deleted element");
+  } catch (error) {
+    console.error("Could not delete:", error);
+  }
 }

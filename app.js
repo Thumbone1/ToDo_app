@@ -1,6 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { addTodo, getTodos, deleteTodo } from "./database.js";
+import {
+  addTodo,
+  getTodos,
+  connectToDatabase,
+  deleteTodo,
+  List
+} from "./database.js";
 
 const app = express();
 const port = 3000;
@@ -9,22 +15,27 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-  const todayItems = getTodos().then(items);
-  console.log(todayItems);
-  res.render("index.ejs", { todayItems });
+connectToDatabase();
+
+app.get("/", async (req, res) => {
+  const todaysItems = await getTodos();
+
+  console.log(todaysItems);
+  res.render("index.ejs", { todaysItems });
 });
 
-app.get("/work", (req, res) => {
-  getTodos().then;
-  res.render("work.ejs", { workTodos });
-});
+app.get("/:customListName", async (req, res) => {
+  const someName = req.params.customListName;
+  
+})
 
-app.post("/", (req, res) => {
+app.post("/", async (req, res) => {
   try {
-    const newTodo = req.body.newTodo;
+    if (req.body.newTodo) {
+      const newTodo = req.body.newTodo;
 
-    addTodo(newTodo);
+      await addTodo(newTodo);
+    }
 
     res.redirect("/");
   } catch (err) {
@@ -33,16 +44,14 @@ app.post("/", (req, res) => {
   }
 });
 
-app.post("/work", (req, res) => {
+app.post("/delete", async (req, res) => {
   try {
-    const newWorkTodo = req.body.newWorkTodo;
-    if (newWorkTodo) {
-      workTodos.push(newWorkTodo);
-    }
-    res.redirect("/work");
-  } catch (err) {
-    console.log(err);
-    res.redirect("error.ejs");
+    const todotodelete = req.body.checkbox;
+    await deleteTodo(todotodelete);
+
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error deleting list item:", error);
   }
 });
 

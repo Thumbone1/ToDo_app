@@ -1,7 +1,14 @@
 <ul class="unordered-list-element">
-  <label class="form-check-label">
-    <input class="checkbox" type="checkbox" id="todo" />
+  <form class="list-form" action="/delete" method="post">
+    <input
+      name="checkbox"
+      class="checkbox"
+      type="checkbox"
+      id="todo"
+      onchange="submit()"
+      value="<%= id %>"
+    />
     <label for="todo"><%= toDo %></label>
     <i class="input-helper"></i>
-  </label>
+  </form>
 </ul>

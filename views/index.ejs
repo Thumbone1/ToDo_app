@@ -21,8 +21,8 @@
     </form>
 
     <div class="list-container">
-      <% if (todayItems.length > 0) { %> <% todayItems.forEach((item) => { %>
-      <%- include("partials/listElement.ejs", { toDo: item }) %> <% }); %> <% }
+      <% if (todaysItems.length > 0) { %> <% todaysItems.forEach((item) => { %>
+      <%- include("partials/listElement.ejs", { toDo: item.name, id: item._id }) %> <% }); %> <% }
       else { %>
       <p>No todos yet.</p>
       <% } %>

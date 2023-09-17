@@ -55,7 +55,7 @@ h1 {
   gap: 20px;
 }
 
-.form-check-label {
+.list-form {
   display: flex;
   align-items: center;
 }
@@ -122,16 +122,6 @@ ul {
   text-decoration: line-through;
   text-decoration-color: #554d4d;
   text-decoration-thickness: 0.3rem;
-}
-
-.checkbox:checked + .input-helper {
-  content: "X";
-  position: relative; 
-  top: 0; 
-  right: -20px;
-  font-size: 20px;
-  color: #ff0000;
-  cursor: pointer;
 }
 
 footer {
