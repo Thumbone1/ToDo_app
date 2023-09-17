@@ -1,29 +1,31 @@
 import express from "express";
 import bodyParser from "body-parser";
+import { addTodo, getTodos, deleteTodo } from "./database.js";
 
 const app = express();
 const port = 3000;
-let dailyTodos = [];
-let workTodos = [];
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("index.ejs", { dailyTodos });
+  const todayItems = getTodos().then(items);
+  console.log(todayItems);
+  res.render("index.ejs", { todayItems });
 });
 
 app.get("/work", (req, res) => {
+  getTodos().then;
   res.render("work.ejs", { workTodos });
 });
 
 app.post("/", (req, res) => {
   try {
     const newTodo = req.body.newTodo;
-    if (newTodo) {
-      dailyTodos.push(newTodo);
-    }
+
+    addTodo(newTodo);
+
     res.redirect("/");
   } catch (err) {
     console.log(err);

@@ -21,9 +21,9 @@
     </form>
 
     <div class="list-container">
-      <% if (dailyTodos.length > 0) { %> <% dailyTodos.forEach((todo) => { %> <%-
-      include("partials/listElement.ejs", { toDo: todo }) %> <% }); %> <% } else
-      { %>
+      <% if (todayItems.length > 0) { %> <% todayItems.forEach((item) => { %>
+      <%- include("partials/listElement.ejs", { toDo: item }) %> <% }); %> <% }
+      else { %>
       <p>No todos yet.</p>
       <% } %>
     </div>
