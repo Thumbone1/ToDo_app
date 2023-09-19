@@ -1,11 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
 import {
-  addTodo,
-  getTodos,
   connectToDatabase,
   deleteTodo,
-  List
+  createList,
+  databaseExists,
+  addItemToList,
+  getList,
 } from "./database.js";
 
 const app = express();
@@ -17,39 +18,55 @@ app.set("view engine", "ejs");
 
 connectToDatabase();
 
-app.get("/", async (req, res) => {
-  const todaysItems = await getTodos();
-
-  console.log(todaysItems);
-  res.render("index.ejs", { todaysItems });
+app.get("/Home", async (req, res) => {
+  if (await databaseExists("Home")) {
+    let foundList = await getList("Home");
+    let listItems = foundList.items;
+    res.render("index.ejs", { listTitle: foundList.name, listItems });
+  } else {
+    await createList("Home");
+    res.redirect("/Home");
+  }
 });
 
-app.get("/:customListName", async (req, res) => {
-  const someName = req.params.customListName;
-  
-})
+app.get("/Home/:customListName", async (req, res) => {
+  const customListName = req.params.customListName;
+
+  if (await databaseExists(customListName)) {
+    let foundList = await getList(customListName);
+    let listItems = foundList.items;
+    res.render("index.ejs", { listTitle: foundList.name, listItems });
+  } else {
+    await createList(customListName);
+    res.redirect(`/Home/${customListName}`);
+  }
+});
 
 app.post("/", async (req, res) => {
-  try {
-    if (req.body.newTodo) {
-      const newTodo = req.body.newTodo;
+  let itemName = req.body.newItem;
+  let listName = req.body.listTitle;
 
-      await addTodo(newTodo);
-    }
+  addItemToList(listName, itemName);
 
-    res.redirect("/");
-  } catch (err) {
-    console.log(err);
-    res.render("error.ejs");
+  if (listName === "Home") {
+    res.redirect("/Home");
+  } else {
+    res.redirect(`/Home/${listName}`);
   }
 });
 
 app.post("/delete", async (req, res) => {
   try {
-    const todotodelete = req.body.checkbox;
-    await deleteTodo(todotodelete);
+    let itemToDelete = req.body.checkbox;
+    let listName = req.body.listTitle;
 
-    res.redirect("/");
+    deleteTodo(listName, itemToDelete);
+
+    if (listName === "Home") {
+      res.redirect("/Home");
+    } else {
+      res.redirect(`/Home/${listName}`);
+    }
   } catch (error) {
     console.error("Error deleting list item:", error);
   }

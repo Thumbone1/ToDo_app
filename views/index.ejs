@@ -1,29 +1,24 @@
 <%- include("partials/header.ejs") %>
 <body>
-  <header>
-    <div class="header-container">
-      <a href="/">Today</a> <a href="/work">Work</a>
-    </div>
-  </header>
-  <hr />
-  <h1>Daily ToDo List</h1>
+  <h1><%= listTitle %></h1>
 
   <div class="app-container">
-    <form action="/" id="form" class="form" method="post">
-      <textarea
-        name="newTodo"
+    <form action="/" class="item-add-form" method="post">
+      <input
         id="add-text-area"
-        cols="20"
-        rows="1"
-        placeholder="What do you need to do?"
-      ></textarea>
-      <button type="submit" id="add-todo-button">Add</button>
+        type="text"
+        name="newItem"
+        placeholder="New ToDo"
+        autocomplete="off"
+      />
+      <input type="hidden" name="listTitle" value="<%= listTitle %>" />
+      <button type="submit" id="add-todo-button" name="list">Add</button>
     </form>
 
     <div class="list-container">
-      <% if (todaysItems.length > 0) { %> <% todaysItems.forEach((item) => { %>
-      <%- include("partials/listElement.ejs", { toDo: item.name, id: item._id }) %> <% }); %> <% }
-      else { %>
+      <% if (listItems.length > 0) { %> <% listItems.forEach((item) => { %> <%-
+      include("partials/listElement.ejs", { toDo: item.name, id: item._id }) %>
+      <% }); %> <% } else { %>
       <p>No todos yet.</p>
       <% } %>
     </div>

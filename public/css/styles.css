@@ -46,7 +46,7 @@ h1 {
   color: #fff;
 }
 
-.form {
+.item-add-form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,7 +129,7 @@ footer {
   text-align: center;
   padding: 10px 0;
   font-size: 14px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   color: #fff;

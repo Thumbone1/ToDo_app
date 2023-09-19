@@ -1,31 +1,18 @@
 import { Schema, model, mongoose } from "mongoose";
 
-//to get rid of prepatory warnings for mongoose 7
-// opts into filtering by properties that aren't in the schema
 mongoose.set("strictQuery", false);
 
-// Define the database URL to connect to:
 const todolistDB = "mongodb://127.0.0.1/todolistDB";
-
-// create new Schema for main list
-const TodoSchema = new Schema({
+const ItemSchema = new Schema({
   name: String,
 });
-
-// create a general schema for custom list names
 const ListSchema = new Schema({
   name: String,
-  item: [TodoSchema],
+  items: [ItemSchema],
 });
+const Item = model("Item", ItemSchema);
+const List = model("List", ListSchema);
 
-// create new model
-const Todo = model("Todo", TodoSchema);
-export const List = model("List", ListSchema);
-
-/**
- * connects to db.
- * throws error if failure to connect
- */
 export async function connectToDatabase() {
   try {
     await mongoose.connect(todolistDB);
@@ -35,46 +22,65 @@ export async function connectToDatabase() {
   }
 }
 
-/**
- *
- * @returns Promise to return array of names from Todos collection
- */
-export async function getTodos() {
+export async function databaseExists(dbName) {
   try {
-    console.log("getting items from the DB");
-    const items = [];
-    const todosFromDB = await Todo.find({});
-    todosFromDB.forEach((item) => items.push(item));
-    return items;
+    if (await List.findOne({ name: dbName })) {
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
-    console.error("The app encountered an error:", error);
+    console.error("Could not check if database exists:", error);
   }
 }
 
-/**
- * @param {newTodo} todoString
- * Should save todo items to the Todos collection
- */
-export async function addTodo(todoString) {
+export async function createList(listName) {
   try {
-    const newDBItem = new Todo({
-      name: todoString,
+    const list = new List({
+      name: listName,
+      items: [],
     });
-    try {
-      await newDBItem.save();
-    } catch (error) {
-      console.error("Didn't save to database due to error:", error);
-    }
+    await list.save();
+  } catch (error) {
+    console.error(
+      `An error occured while trying to create ${listName}:`,
+      error
+    );
+  }
+}
 
-    console.log(`Added ${todoString} to database`);
+export async function getList(listName) {
+  try {
+    const foundList = List.findOne({ name: listName }).exec();
+    return foundList;
+  } catch (error) {
+    console.error(
+      "The app encountered an error while searching for the list:",
+      error
+    );
+  }
+}
+
+export async function addItemToList(listName, itemName) {
+  const newItem = new Item({
+    name: itemName,
+  });
+
+  try {
+    const currentList = await getList(listName);
+    currentList.items.push(newItem), currentList.save();
   } catch (error) {
     console.error("The app encountered a DB error:", error);
   }
 }
 
-export async function deleteTodo(todoId) {
+export async function deleteTodo(listName, itemId) {
   try {
-    await Todo.deleteOne({ _id: todoId });
+    await List.updateOne(
+      { name: listName },
+      { $pull: { items: { _id: itemId } } }
+    );
+
     console.log("deleted element");
   } catch (error) {
     console.error("Could not delete:", error);
