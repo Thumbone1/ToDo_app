@@ -30,7 +30,9 @@ app.get("/Home", async (req, res) => {
 });
 
 app.get("/Home/:customListName", async (req, res) => {
-  const customListName = req.params.customListName;
+  const customListName =
+    req.params.customListName[0].toUpperCase() +
+    req.params.customListName.slice(1);
 
   if (await databaseExists(customListName)) {
     let foundList = await getList(customListName);

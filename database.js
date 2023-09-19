@@ -80,8 +80,6 @@ export async function deleteTodo(listName, itemId) {
       { name: listName },
       { $pull: { items: { _id: itemId } } }
     );
-
-    console.log("deleted element");
   } catch (error) {
     console.error("Could not delete:", error);
   }
